@@ -22,3 +22,7 @@ return c
 
 MATCH (u:User { name: "@palvarez" })-[:ASSIGNED]->(:Course)--(t:Topic)
 RETURN t.name
+
+MATCH (c:Course) WHERE c.name = 'Algoritmos y Estructuras de Datos' and c.class = 30
+CREATE (u:User { name: '@pgodoy', teacher: true })-[r:TEACHES]->(c)
+RETURN u,r,c

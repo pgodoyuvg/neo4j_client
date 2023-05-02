@@ -7,7 +7,10 @@ router.post('/', async (req: Request, res: Response, _next: NextFunction) => {
   const session = driver.session();
   const { user_name: userName } = req.body;
   try {
-    await session.run(`CREATE (:User { name: $userName })`, { userName });
+    const query = `
+    CREATE (:User { name: $userName })
+    `;
+    await session.run(query, { userName });
     res.status(204).send();
   } catch (error) {
     console.error(error);
@@ -27,7 +30,7 @@ router.patch(
       const query = `
         MATCH (u:User), (c: Course)
         WHERE u.name = $userName AND c.name = $courseName
-        CREATE (u)-[r:ASSIGN]->(c)
+        CREATE (u)-[r:ASSIGNED]->(c)
         RETURN u,r,c
       `;
       const { records } = await session.run(query, {
